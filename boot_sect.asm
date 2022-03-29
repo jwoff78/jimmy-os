@@ -1,21 +1,34 @@
 ;
-;  Basic hello world
+;  Basic find-the-byte
 ;
 
-mov ah, 0x0e ; int 10/ah = 0eh -> srolling teletype BIOS routine
+[org 0x7c00] ; Affset all memory readings to where BIOS would start loading the bootloader
 
-mov al, 'H'
+mov ah, 0x0e ; int 10/ah = 0eh -> print
+
+
+; First attempt
+mov al, the_secret
 int 0x10
-mov al, 'e'
+
+; Second attempt
+mov al, [the_secret]
 int 0x10
-mov al, 'l'
+
+; Third attempt
+mov bx, the_secret
+add bx, 0x7c00
+mov al, [bx]
 int 0x10
-mov al, 'l'
-int 0x10
-mov al, 'o'
+
+; Attempt 4
+mov al, [0x7c1e]
 int 0x10
 
 jmp $ ; Jump to current(while true be like)
+
+the_secret:
+    db "X"
 
 ;
 ; Boot sector magic(padding + identification)
