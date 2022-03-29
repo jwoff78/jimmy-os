@@ -2,36 +2,28 @@
 ;  Basic stack stuff
 ;
 
-;[org 0x7c00] ; Affset all memory readings to where BIOS would start loading the bootloader
+[org 0x7c00] ; Affset all memory readings to where BIOS would start loading the bootloader
 
-mov bx, 30
+mov bx, HELLO_MSG
+;call print
 
-; if bx <= 4, run(jump to) "if"
-cmp bx, 4
-jle if
+mov bx, GOODBYE_MSG
+;call print
 
-; if bx < 40, do "elif"
-cmp bx, 40
-jl elif
-
-; Otherwise, do "else"
-jmp else
-
-if:
-    mov al, 'A'
-    jmp end ; Jump to end of loop
-elif:
-    mov al, 'B'
-    jmp end ; Jump to end of the loop
-else:
-    mov al, 'C'
-end:
-
-
-mov ah, 0x0e ; int 10/ah = 0eh -> print
-int 0x10        ; print(al)
+mov dx, 0x1fb6
+call print_hex
 
 jmp $ ; Just hang the CPU
+
+; Inclusions can and should be done post-loop to avoid calling them
+
+%include "print.asm"
+
+HELLO_MSG:
+ db 'Hello, World!', 0 ; <- The zero is the end of the null-terminated string.
+
+GOODBYE_MSG:
+ db 'Goodbye!', 0
 
 ;
 ; Boot sector magic(padding + identification)
