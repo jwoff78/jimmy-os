@@ -1,3 +1,10 @@
+; print
+; Prints a null-terminated string pointer to BIOS
+; USE:
+; mov bx, STR_PTR
+; call pring
+; Prints the value in STR_PTR.
+
 print:
     pusha ; Push all registries to the stack, to make sure no values are modified
     mov ah, 0x0e ; int 10/ah = 0eh -> print
@@ -15,6 +22,14 @@ print:
     end_print_loop: ; Just a basic label to mark outside of the loop
     popa ; Restore all registry values from stack
     ret ; Return and head back to the location of the call
+
+; print_hex
+; Prints out a hex value to BIOS
+; Useful for debugging
+; USE:
+; mov dx, 0x1fb6
+; call print_hex
+; Prints "0x1FB6"
 
 print_hex:
     pusha
@@ -63,3 +78,5 @@ print_hex_loop_end:
 
 ; globals
 HEX_OUT: db '0x0000', 13, 10, 0
+NEWLINE: db 0x0D, 0x0A, 0x00
+HELLO_WORLD: db 'Hello, World!', 0x0D, 0x0A, 0x00

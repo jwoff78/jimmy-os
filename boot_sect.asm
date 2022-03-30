@@ -4,17 +4,20 @@
 
 [org 0x7c00] ; Affset all memory readings to where BIOS would start loading the bootloader
 
-mov dx, 0x1fb6
+mov dx, 0x1234
 call print_hex
+
+mov bx, NEWLINE
+call print
+
+mov bx, HELLO_WORLD
+call print
 
 jmp $ ; Just hang the CPU
 
 ; Inclusions can and should be done post-loop to avoid calling them
 
 %include "print.asm"
-
-QUIT_MSG:
- dw 'Bye!', 0
 
 ;
 ; Boot sector magic(padding + identification)
