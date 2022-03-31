@@ -11,7 +11,7 @@ all: os-image
 
 # Run whatever we need
 run: all
-	qemu-system-x86_64 -fda os_image
+	qemu-system-x86_64 -fda os-image
 
 # This is the actual disk image that the computer loads
 # which is the combination of out compiled bootsector and kernel
