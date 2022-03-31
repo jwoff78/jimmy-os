@@ -1,9 +1,16 @@
-nasm boot_sect.asm -f bin -o build/boot_sect.bin
+cd boot
+
+nasm boot_sect.asm -f bin -o ../build/boot_sect.bin
 [ $? -eq 0 ]  || exit 1
+
+nasm kernel_entry.asm -f elf -o ../build/kernel_entry.o
+[ $? -eq 0 ]  || exit 1
+
+cd ..
 
 gcc -ffreestanding -fno-pic -m32 -mmanual-endbr -c kernel/kernel.c -o build/kernel.o
 [ $? -eq 0 ]  || exit 1
-ld -o build/kernel.bin -m elf_i386 -Ttext 0x1000 --oformat binary build/kernel.o -nmagic -n -Tlinker.ld
+ld -o build/kernel.bin -m elf_i386 -Ttext 0x1000 --oformat binary build/kernel_entry.o build/kernel.o -nmagic -n -Tlinker.ld
 [ $? -eq 0 ]  || exit 1
 
 cat build/boot_sect.bin build/kernel.bin > os_image

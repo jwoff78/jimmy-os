@@ -47,7 +47,7 @@ BEGIN_PM:
 
     call KERNEL_OFFSET ; Jump to kernel adress
 
-    jmp $ ; Hand
+    jmp $ ; Hang
 
 ; GLOBALS
 BOOT_DRIVE      db 0
