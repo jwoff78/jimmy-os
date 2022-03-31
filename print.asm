@@ -1,11 +1,11 @@
-; print
+; print_string
 ; Prints a null-terminated string pointer to BIOS
 ; USE:
 ; mov bx, STR_PTR
-; call pring
+; call print_string
 ; Prints the value in STR_PTR.
 
-print:
+print_string:
     pusha ; Push all registries to the stack, to make sure no values are modified
     mov ah, 0x0e ; int 10/ah = 0eh -> print
     mov al, [bx] ; Copy current CHAR to the AL registry
@@ -23,60 +23,20 @@ print:
     popa ; Restore all registry values from stack
     ret ; Return and head back to the location of the call
 
-; print_hex
-; Prints out a hex value to BIOS
-; Useful for debugging
+; write
+; Prints a single char to BIOS
 ; USE:
-; mov dx, 0x1fb6
-; call print_hex
-; Prints "0x1FB6"
-
-print_hex:
+; mov bx, CHAR
+; call write
+; Prints CHAR
+write:
     pusha
-
-    mov ax, 3
-    print_hex_loop:
-
-        ; CX should become the current char.
-        ; We need to get the current 4 bits of dx
-
-        mov bx, HEX_OUT
-        add bx, 5
-        sub bx, ax
-
-        mov cx, dx
-        and cx, 0xF000
-        shr cx, 12
-        add cx, 48
-
-        cmp cx, 56
-        jg print_hex_if
-        jmp print_hex_if_else
-
-        print_hex_if:
-            add cx, 7
-            mov word[bx], cx
-            jmp print_hex_if_end
-        print_hex_if_else:
-            mov word[bx], cx
-    print_hex_if_end:
-
-        dec ax
-        shl dx, 4
-
-        cmp ax, 0
-        jl print_hex_loop_end ; If al is NULL, the string is terminated and we can end the loop
-
-        jmp print_hex_loop
-
-print_hex_loop_end:
-    mov bx, HEX_OUT
-    call print
-
+    mov ah, 0x0e ; int 10/ah = 0eh -> print
+    int 0x10        ; print(al)
     popa
     ret
 
 ; globals
-HEX_OUT: db '0x0000', 13, 10, 0
+
 NEWLINE: db 0x0D, 0x0A, 0x00
 HELLO_WORLD: db 'Hello, World!', 0x0D, 0x0A, 0x00
