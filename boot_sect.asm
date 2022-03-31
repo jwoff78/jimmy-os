@@ -1,14 +1,38 @@
+; 
+; 32-bit boot sector!
 ;
-;  Disk reading
-;
 
+[org 0x7c00]
 
-jmp $
+    mov bp, 0x9000 ; Set the stack
+    mov sp, bp
 
-; Inclusions can and should be done post-loop to avoid calling them
+    mov bx, MSG_REAL_MODE
+    call print_string
+
+    call switch_to_pm ; Note that this is the end
+
+    jmp $
+
+; INCLUDES
+
+%include "print.asm"
+%include "sys32/gtd.asm"
+%include "sys32/print_pm.asm"
+%include "sys32/pm_switch.asm"
+
+[bits 32]
+
+BEGIN_PM:
+    
+    mov ebx, MSG_PROT_MODE
+    call print_string_pm ; Use 32 bit ver
+
+    jmp $ ; Hand
 
 ; GLOBALS
-BOOT_DRIVE: db 0
+MSG_REAL_MODE db "Started in 16-bit real mode!", 0
+MSG_PROT_MODE db "Landed in 32-bit protected mode!", 0
 
 ;
 ; Boot sector magic(padding + identification)
@@ -16,10 +40,3 @@ BOOT_DRIVE: db 0
 
 times 510-($-$$) db 0
 dw 0xaa55
-
-; We know that BIOS will load only the first 512 byte sector from the disk,
-; So if we purposely add a few more sectors to our code by repeating some familliar
-; numbers, we can prove ourselfs that we actually loaded those additional
-; two sectors from the disk we booted from
-times 256 dw 0xdada
-times 256 dw 0xface
