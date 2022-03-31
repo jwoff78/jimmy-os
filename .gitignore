@@ -1,1 +1,3 @@
-boot_sect.bin
+os-image
+**.bin
+**.o
