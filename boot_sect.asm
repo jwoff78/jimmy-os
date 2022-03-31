@@ -1,23 +1,9 @@
 ;
 ;  Disk reading
 ;
-[org 0x7c00]
 
-    mov [BOOT_DRIVE], dl ; BIOS stores out boot drive in DL, so it's best to remember this
 
-    mov bp, 0x8000 ; Here we set our stack out of the way
-    mov sp, bp
-
-    mov bx, 0x9000 ; Load 5 sectors to 0x0000(ES):0x9000(BX) from the boot disk
-    mov dh, 5
-    mov dl, [BOOT_DRIVE]
-    call disk_load
-
-    mov dx, [0x9000 + 512] ; Also, print the first word from the 2nd loaded sector
-                           ; Should be 0xface
-    call print_hex
-
-    jmp $
+jmp $
 
 ; Inclusions can and should be done post-loop to avoid calling them
 
