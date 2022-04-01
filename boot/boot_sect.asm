@@ -45,6 +45,19 @@ BEGIN_PM:
     mov ebx, MSG_PROT_MODE
     call print_string_pm ; Use 32 bit ver
 
+    ; This magic code disables the blinking cursor
+    push    ax
+    push    dx
+    mov     al,0x0A         ;Function 10 of the video card.
+    mov     dx,0x03D4       ;Video command port
+    out     dx,al           ;Activate command
+    mov     dx,0x03D5       ;Video status port
+    in      al,dx
+    or      ax,00010000b    ;Flick the cursor off.
+    out     dx,ax
+    push    dx
+    push    ax
+
     call KERNEL_OFFSET ; Jump to kernel adress
 
     jmp $ ; Hang
