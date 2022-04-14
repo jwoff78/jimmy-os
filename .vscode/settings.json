@@ -1,5 +1,10 @@
 {
     "files.associations": {
-        "screen.h": "c"
+        "screen.h": "c",
+        "keyboard.h": "c",
+        "low_level.h": "c",
+        "idt.h": "c",
+        "isr.h": "c",
+        "util.h": "c"
     }
 }

@@ -32,7 +32,7 @@ load_kernel:
     call print_string
 
     mov bx, KERNEL_OFFSET ; Setup the disk_load routine so that we load 
-    mov dh, 15            ; The first 15 sectors, from the boot disk
+    mov dh, 54   ; The first 54 sectors(as big as the ISO file is), from the boot disk
     mov dl, [BOOT_DRIVE]  ; To adress KERNEL_OFFSET
     call disk_load
 
