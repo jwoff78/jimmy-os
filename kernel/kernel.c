@@ -36,8 +36,4 @@ void main(){
     asm volatile("sti");
 
     init_keyboard(keyboard_callback);
-
-    float i = 34 / 0;
-    print_letter(i);
-
 }
